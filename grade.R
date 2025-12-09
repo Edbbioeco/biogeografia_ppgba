@@ -94,4 +94,6 @@ grade_cep |>
 ## Exportando ----
 
 grade_cep |>
+  sf::st_transform(crs = 4674) |>
   sf::st_write("grade_cep.shp")
+

@@ -4,7 +4,7 @@ library(tidyverse)
 
 library(sf)
 
-library(openxlsx)
+library(writexl)
 
 # Dados ----
 
@@ -56,8 +56,7 @@ grade_cep |>
 
 oc_sibbr_shp <- oc_sibbr_trat |>
   sf::st_as_sf(coords = c("Longitude", "Latitude"),
-               crs = 4674) |>
-  sf::st_transform(crs = grade_cep |> sf::st_crs())
+               crs = 4674)
 
 oc_sibbr_shp
 
@@ -97,5 +96,5 @@ oc_sibbr_inter |>
 ### Exportando ----
 
 oc_sibbr_inter |>
-  openxlsx::write.xlsx("registros_sibbr.xlsx")
+  writexl::write_xlsx("registros_sibbr.xlsx")
 
