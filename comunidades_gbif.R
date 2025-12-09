@@ -8,7 +8,7 @@ library(parzer)
 
 library(sf)
 
-library(openxlsx)
+library(writexl)
 
 # Dados ----
 
@@ -68,8 +68,7 @@ grade_cep |>
 
 oc_gbif_shp <- oc_gbif_trat |>
   sf::st_as_sf(coords = c("Longitude", "Latitude"),
-               crs = 4674) |>
-  sf::st_transform(crs = grade_cep |> sf::st_crs())
+               crs = 4674)
 
 oc_gbif_shp
 
@@ -109,5 +108,5 @@ oc_gbif_inter |>
 ### Exportando ----
 
 oc_gbif_inter |>
-  openxlsx::write.xlsx("registros_gbif.xlsx")
+  writexl::write_xlsx("registros_gbif.xlsx")
 

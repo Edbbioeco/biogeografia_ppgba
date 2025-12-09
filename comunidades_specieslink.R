@@ -6,7 +6,7 @@ library(tidyverse)
 
 library(sf)
 
-library(openxlsx)
+library(writexl)
 
 # Dados ----
 
@@ -54,8 +54,7 @@ grade_cep |>
 
 oc_specieslink_shp <- oc_specieslink_trat |>
   sf::st_as_sf(coords = c("longitude", "latitude"),
-               crs = 4674) |>
-  sf::st_transform(crs = grade_cep |> sf::st_crs())
+               crs = 4674)
 
 oc_specieslink_shp
 
@@ -104,4 +103,4 @@ oc_specieslink_inter |>
 ### Exportando ----
 
 oc_specieslink_inter |>
-  openxlsx::write.xlsx("registros_specieslink.xlsx")
+  writexl::write_xlsx("registros_specieslink.xlsx")
