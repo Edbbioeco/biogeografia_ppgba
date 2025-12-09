@@ -18,7 +18,7 @@ registros_gbif <- readxl::read_xlsx("registros_gbif.xlsx")
 
 ### Visualizando ----
 
-registros_gbif %>% dplyr::glimpse()
+registros_gbif |> dplyr::glimpse()
 
 registros_gbif
 
@@ -30,7 +30,7 @@ registros_specieslink <- readxl::read_xlsx("registros_specieslink.xlsx")
 
 ### Visualizando ----
 
-registros_specieslink %>% dplyr::glimpse()
+registros_specieslink |> dplyr::glimpse()
 
 registros_specieslink
 
@@ -42,7 +42,7 @@ registros_sibbr <- readxl::read_xlsx("registros_sibbr.xlsx")
 
 ### Visualizando ----
 
-registros_sibbr %>% dplyr::glimpse()
+registros_sibbr |> dplyr::glimpse()
 
 registros_sibbr
 
@@ -54,7 +54,7 @@ registros_bib <- readxl::read_xlsx("registros_bib.xlsx")
 
 ### Visualizando ----
 
-registros_bib %>% dplyr::glimpse()
+registros_bib |> dplyr::glimpse()
 
 registros_bib
 
@@ -68,7 +68,7 @@ grade_cep <- sf::st_read("grade_cep.shp")
 
 grade_cep
 
-grade_cep %>%
+grade_cep |>
   ggplot() +
   geom_sf(color = "black", fill = "green4")
 
@@ -89,7 +89,7 @@ registros
 
 ### Lista de espécies ----
 
-registros$species %>% unique()
+registros$species |> unique()
 
 # species == "Rhinella margaritifera" ~ "Rhinella hoogmoedi"
 # species %in% c("Rhinella jimi", "Rhinella marina", "Rhinella schneideri") ~ "Rhinella diptycha"
@@ -124,7 +124,7 @@ registros$species %>% unique()
 
 ### Corrigindo a taxonomia ----
 
-registros <- registros %>%
+registros <- registros |>
   dplyr::mutate(species = dplyr::case_when(species == "Rhinella margaritifera" ~ "Rhinella hoogmoedi",
                                            species %in% c("Rhinella jimi", "Rhinella marina", "Rhinella schneideri") ~ "Rhinella diptycha",
                                            species %in% c("Dendropsophus werneri", "Dendropsophus rubicundulus") ~ "Dendropsophus branneri",
@@ -158,7 +158,7 @@ registros <- registros %>%
     species %in% c("Adelophrnne nordestina", "Adelophrynne nordestina") ~ "Adelophrynne nordestina",
     species == "Vitreorana balionma" ~ "Vitreorana baliomma",
     .default = species
-  )) %>%
+  )) |>
   dplyr::filter(!species %in% c("Breviceps gibbosus", "Vitreorana baliomma"))
 
 registros
@@ -167,23 +167,25 @@ registros
 
 ### Matriz com todas as comunidades ----
 
-matriz <- registros %>%
-  dplyr::rename("Assemblage" = FID) %>%
-  dplyr::group_by(Assemblage, species) %>%
+matriz <- registros |>
+  dplyr::rename("Assemblage" = FID) |>
+  dplyr::group_by(Assemblage, species) |>
   dplyr::summarise(presence = max(presence, na.rm = TRUE),
-                   .groups = "drop") %>%
+                   .groups = "drop") |>
   tidyr::pivot_wider(names_from = species,
                      values_from = presence,
-                     values_fill = 0) %>%
-  dplyr::left_join(registros %>%
-                     dplyr::rename("Assemblage" = FID) %>%
+                     values_fill = 0) |>
+  dplyr::left_join(registros |>
+                     dplyr::rename("Assemblage" = FID) |>
                      dplyr::select(1, 4:6),
-                   by = "Assemblage") %>%
+                   by = "Assemblage") |>
   dplyr::relocate(Latitude:Source,
-                  .before = `Leptodactylus fuscus`) %>%
+                  .before = `Leptodactylus fuscus`) |>
   dplyr::distinct(Assemblage, .keep_all = TRUE)
 
 matriz
+
+matriz |> dplyr::glimpse()
 
 ggplot() +
   geom_sf(data = grade_cep, color = "black", fill = "green4") +
@@ -191,25 +193,25 @@ ggplot() +
 
 ### Removendo as comunidades com menos de 5 espécies ----
 
-matriz <- matriz %>% as.data.frame()
-
-rownames(matriz) <- matriz$Assemblage
-
-comunidades <- matriz %>%
-  dplyr::select(5:108) %>%
-  vegan::specnumber() %>%
-  as.data.frame() %>%
-  tibble::rownames_to_column() %>%
-  dplyr::filter(. >= 5) %>%
+comunidades <- matriz |>
+  tibble::column_to_rownames(var = "Assemblage") |>
+  dplyr::select(!Latitude:Source) |>
+  vegan::specnumber() |>
+  as.data.frame() |>
+  tibble::rownames_to_column() |>
+  dplyr::rename("Riqueza" = 2) |>
+  dplyr::filter(Riqueza >= 5) |>
   dplyr::pull(rowname)
 
 comunidades
 
-matriz_trat <- matriz %>%
-  dplyr::filter(Assemblage %in% comunidades) %>%
+matriz_trat <- matriz |>
+  dplyr::filter(Assemblage %in% comunidades) |>
   tibble::as_tibble()
 
 matriz_trat
+
+matriz_trat |> dplyr::glimpse()
 
 ggplot() +
   geom_sf(data = grade_cep, color = "black", fill = "green4") +
@@ -217,18 +219,18 @@ ggplot() +
 
 ### Removendo possíveies espécies sem registro ----
 
-especies_retirar <- matriz_trat %>%
-  tidyr::pivot_longer(cols = 5:108,
+especies_retirar <- matriz_trat |>
+  tidyr::pivot_longer(cols = !c(Assemblage, Latitude:Source),
                       names_to = "Espécie",
-                      values_to = "Presença") %>%
-  dplyr::summarise(Abundancia = Presença %>% sum(),
-                   .by = Espécie) %>%
-  dplyr::filter(Abundancia == 0) %>%
+                      values_to = "Presença") |>
+  dplyr::summarise(Abundancia = Presença |> sum(),
+                   .by = Espécie) |>
+  dplyr::filter(Abundancia == 0) |>
   dplyr::pull(Espécie)
 
 especies_retirar
 
-matriz_trat <- matriz_trat %>%
+matriz_trat <- matriz_trat |>
   dplyr::select(-especies_retirar)
 
 matriz_trat
@@ -237,14 +239,14 @@ matriz_trat
 
 ## Registros ----
 
-registros %>%
-  dplyr::rename("Assemblage" = FID) %>%
+registros |>
+  dplyr::rename("Assemblage" = FID) |>
   openxlsx::write.xlsx("registros.xlsx")
 
 ## Matriz ----
 
-matriz %>%
+matriz |>
   openxlsx::write.xlsx("matriz.xlsx")
 
-matriz_trat %>%
+matriz_trat |>
   openxlsx::write.xlsx("matriz_trat.xlsx")
