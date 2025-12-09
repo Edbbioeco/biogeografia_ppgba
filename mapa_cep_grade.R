@@ -109,6 +109,7 @@ mapa_princ |>
                      x = 0.6,
                      y = 0.55,
                      width = 0.35,
-                     height = 0.35)
+                     height = 0.35) +
+  ggview::canvas(height = 10, width = 12)
 
 ggsave("mapa_cep.png", height = 10, width = 12)
