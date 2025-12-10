@@ -118,17 +118,16 @@ multiplos_rasters <- function(especie){
 
   raster_inicial <- grade |>
     dplyr::left_join(grade_id |>
-                     sf::st_drop_geometry(),
-                   by = "id") |>
+                       sf::st_drop_geometry(), by = "id") |>
     dplyr::mutate(presenca = 1) |>
     tidyr::drop_na() |>
     tidyr::pivot_wider(names_from = Espécie,
-                     values_from = presenca,
-                     values_fill = 0,
-                     values_fn = ~max(.)) |>
+                       values_from = presenca,
+                       values_fill = 0,
+                       values_fn = ~max(.)) |>
     tidyr::pivot_longer(cols = 3:146,
-                      names_to = "Espécie",
-                      values_to = "presenca") |>
+                        names_to = "Espécie",
+                        values_to = "presenca") |>
     dplyr::filter(Espécie == especie) |>
     terra::vect() |>
     terra::ext() |>
@@ -142,12 +141,12 @@ multiplos_rasters <- function(especie){
     dplyr::mutate(presenca = 1) |>
     tidyr::drop_na() |>
     tidyr::pivot_wider(names_from = Espécie,
-                     values_from = presenca,
-                     values_fill = 0,
-                     values_fn = ~max(.)) |>
+                       values_from = presenca,
+                       values_fill = 0,
+                       values_fn = ~ max(.)) |>
     tidyr::pivot_longer(cols = 3:146,
-                      names_to = "Espécie",
-                      values_to = "presenca") |>
+                        names_to = "Espécie",
+                        values_to = "presenca") |>
     dplyr::filter(Espécie == especie) |>
     terra::vect() |>
     terra::rasterize(raster_inicial, field = "presenca")
@@ -189,14 +188,27 @@ occ_raster <- "occ_raster.tif"
 we_raster <- phyloraster::rast.we(occ_raster,
                                    occ_raster |> phyloraster::inv.range())
 
+we_raster
+
 we_raster |> plot()
+
+ggplot() +
+  tidyterra::geom_spatraster(data = we_rasster) +
+  scale_fill_viridis_c(na.value = "transparent")
 
 ## Calculando EA padronizado pela riqueza de espécies através do pacote phyloraster ----
 
 we_raster_ses <- phyloraster::rast.we.ses(occ_raster,
-                                      occ_raster |> phyloraster::inv.range())
+                                          occ_raster |> phyloraster::inv.range())
+
+we_raster_ses
 
 we_raster_ses |> plot()
+
+ggplot() +
+  tidyterra::geom_spatraster(data = we_raster_ses) +
+  scale_fill_viridis_c(na.value = "transparent") +
+  facet_wrap(~lyr)
 
 # Análise de Parcimônia de Endemicidade ----
 
