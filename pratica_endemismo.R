@@ -50,7 +50,11 @@ ggplot() +
 
 grade <- df_sf |>
   sf::st_make_grid(cellsize = c(6.500, 6.980),
-                          offset = c(-96.000, -48.000))
+                          offset = c(-96.000, -48.000)) |>
+  sf::st_as_sf() |>
+  dplyr::mutate(id = dplyr::row_number())
+
+grade
 
 ggplot() +
   geom_sf(data = grade) +
@@ -58,3 +62,46 @@ ggplot() +
 
 ## Calculando a intersecção ----
 
+grade_id <- df_sf |>
+  sf::st_join(grade)
+
+grade_id
+
+# Endemismo ----
+
+## Abrangência da espécie ----
+
+abg_sps <- grade_id |>
+  sf::st_drop_geometry() |>
+  dplyr::summarise(celulas = dplyr::n_distinct(id),
+                   .by = Espécie)
+
+abg_sps
+
+## Endemicidade ----
+
+valoes_we <- grade_id |>
+  sf::st_drop_geometry() |>
+  dplyr::left_join(abg_sps,
+                   by = "Espécie") |>
+  dplyr::summarise(WE = sum(1 / celulas),
+                   .by = id)
+
+## Mapa ----
+
+### Unindo os valores ----
+
+grade_id_we <- grade |>
+  dplyr::left_join(valoes_we,
+                   by = "id")
+
+
+
+grade_id_we
+
+### Mapa ----
+
+ggplot() +
+  geom_sf(data = grade_id_we, aes(color = WE, fill = WE)) +
+  scale_color_viridis_c(na.value = "transparent") +
+  scale_fill_viridis_c(na.value = "transparent")
