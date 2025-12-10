@@ -4,7 +4,7 @@ library(tidyverse)
 
 library(sf)
 
-library(phyloregion)
+library(phyloraster)
 
 # Dados ----
 
@@ -94,8 +94,6 @@ valoes_we <- grade_id |>
 grade_id_we <- grade |>
   dplyr::left_join(valoes_we,
                    by = "id")
-
-
 
 grade_id_we
 
