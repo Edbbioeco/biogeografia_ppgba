@@ -34,3 +34,27 @@ df_occ <- linhas |>
 df_occ
 
 df_occ |> dplyr::glimpse()
+
+# Grade -----
+
+## Transformando as ocorrencias em um shapefile ----
+
+df_sf <- df_occ |>
+  sf::st_as_sf(coords = c("long", "lat"),
+               crs = 4674)
+
+ggplot() +
+  geom_sf(data = df_sf)
+
+## Criando a grade ----
+
+grade <- df_sf |>
+  sf::st_make_grid(cellsize = c(6.500, 6.980),
+                          offset = c(-96.000, -48.000))
+
+ggplot() +
+  geom_sf(data = grade) +
+  geom_sf(data = df_sf)
+
+## Calculando a intersecção ----
+
