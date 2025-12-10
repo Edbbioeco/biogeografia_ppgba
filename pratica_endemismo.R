@@ -110,7 +110,7 @@ ggplot() +
   scale_color_viridis_c(na.value = "transparent") +
   scale_fill_viridis_c(na.value = "transparent")
 
-# phyloraster ----
+# Endemismo com o pacote phyloraster ----
 
 ## Gerando multiplos rasters
 
@@ -181,6 +181,8 @@ occ_raster |> plot()
 
 occ_raster |>
   terra::writeRaster("occ_raster.tif")
+
+occ_raster <- "occ_raster.tif"
 
 ## Calculando EA através do pacote phyloraster ----
 
