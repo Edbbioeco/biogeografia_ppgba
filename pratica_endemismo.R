@@ -4,6 +4,8 @@ library(tidyverse)
 
 library(sf)
 
+library(terra)
+
 library(phyloraster)
 
 # Dados ----
@@ -103,3 +105,89 @@ ggplot() +
   geom_sf(data = grade_id_we, aes(color = WE, fill = WE)) +
   scale_color_viridis_c(na.value = "transparent") +
   scale_fill_viridis_c(na.value = "transparent")
+
+# phyloraster ----
+
+## Gerando multiplos rasters
+
+multiplos_rasters <- function(especie){
+
+  raster_inicial <- grade |>
+    dplyr::left_join(grade_id |>
+                     sf::st_drop_geometry(),
+                   by = "id") |>
+    dplyr::mutate(presenca = 1) |>
+    tidyr::drop_na() |>
+    tidyr::pivot_wider(names_from = Espécie,
+                     values_from = presenca,
+                     values_fill = 0,
+                     values_fn = ~max(.)) |>
+    tidyr::pivot_longer(cols = 3:146,
+                      names_to = "Espécie",
+                      values_to = "presenca") |>
+    dplyr::filter(Espécie == especie) |>
+    terra::vect() |>
+    terra::ext() |>
+    terra::rast(resolution = c(6.500, 6.980))
+
+
+  raster_sps <- grade |>
+    dplyr::left_join(grade_id |>
+                     sf::st_drop_geometry(),
+                   by = "id") |>
+    dplyr::mutate(presenca = 1) |>
+    tidyr::drop_na() |>
+    tidyr::pivot_wider(names_from = Espécie,
+                     values_from = presenca,
+                     values_fill = 0,
+                     values_fn = ~max(.)) |>
+    tidyr::pivot_longer(cols = 3:146,
+                      names_to = "Espécie",
+                      values_to = "presenca") |>
+    dplyr::filter(Espécie == especie) |>
+    terra::vect() |>
+    terra::rasterize(raster_inicial, field = "presenca")
+
+  raster_sps |> plot()
+
+  assign(paste0("raster_occ_", especie),
+         raster_sps,
+         envir = globalenv())
+
+
+}
+
+especie <- df_occ$Espécie |> unique()
+
+especie
+
+purrr::walk(especie, multiplos_rasters)
+
+## Unindo os rasters -----
+
+occ_raster <- ls(pattern = "raster_occ_") |>
+  mget(envir = globalenv()) |>
+  terra::rast()
+
+occ_raster
+
+occ_raster |> plot()
+
+## Exportando ----
+
+occ_raster |>
+  terra::writeRaster("occ_raster.tif")
+
+## Calculando EA através do pacote phyloraster ----
+
+we_raster <- phyloraster::rast.we(occ_raster,
+                                   occ_raster |> phyloraster::inv.range())
+
+we_raster |> plot()
+
+## Calculando EA padronizado pela riqueza de espécies através do pacote phyloraster ----
+
+we_raster_ses <- phyloraster::rast.we.ses(occ_raster,
+                                      occ_raster |> phyloraster::inv.range())
+
+we_raster_ses |> plot()
