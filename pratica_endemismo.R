@@ -90,19 +90,21 @@ abg_sps
 
 ## Endemicidade ----
 
-valoes_we <- grade_id |>
+valores_we <- grade_id |>
   sf::st_drop_geometry() |>
   dplyr::left_join(abg_sps,
                    by = "Espécie") |>
   dplyr::summarise(WE = sum(1 / celulas),
                    .by = id)
 
+valores_we
+
 ## Mapa ----
 
 ### Unindo os valores ----
 
 grade_id_we <- grade |>
-  dplyr::left_join(valoes_we,
+  dplyr::left_join(valores_we,
                    by = "id") |>
   dplyr::mutate(Area = dplyr::case_when(WE >= 500 ~ "Endemismo",
                                         WE < 500 ~ "ground",
