@@ -6,7 +6,7 @@ library(tidyverse)
 
 library(sf)
 
-library(openxlsx)
+library(writexl)
 
 # Dados ----
 
@@ -180,7 +180,7 @@ matriz <- registros |>
                      dplyr::select(1, 4:6),
                    by = "Assemblage") |>
   dplyr::relocate(Latitude:Source,
-                  .before = `Leptodactylus fuscus`) |>
+                  .before = `Dermatonotus muelleri`) |>
   dplyr::distinct(Assemblage, .keep_all = TRUE)
 
 matriz
@@ -246,7 +246,7 @@ registros |>
 ## Matriz ----
 
 matriz |>
-  openxlsx::write.xlsx("matriz.xlsx")
+  writexl::write_xlsx("matriz.xlsx")
 
 matriz_trat |>
-  openxlsx::write.xlsx("matriz_trat.xlsx")
+  writexl::write_xlsx("matriz_trat.xlsx")
