@@ -6,9 +6,13 @@ library(sf)
 
 library(terra)
 
+library(tidyterra)
+
 library(phyloraster)
 
 library(phangorn)
+
+library(SESraster)
 
 library(ggtree)
 
@@ -181,7 +185,7 @@ occ_raster |> plot()
 occ_raster |>
   terra::writeRaster("occ_raster.tif")
 
-occ_raster <- "occ_raster.tif"
+occ_raster <- terra::rast("occ_raster.tif")
 
 ## Calculando EA através do pacote phyloraster ----
 
@@ -193,7 +197,7 @@ we_raster
 we_raster |> plot()
 
 ggplot() +
-  tidyterra::geom_spatraster(data = we_rasster) +
+  tidyterra::geom_spatraster(data = we_raster) +
   scale_fill_viridis_c(na.value = "transparent")
 
 ## Calculando EA padronizado pela riqueza de espécies através do pacote phyloraster ----
@@ -258,12 +262,12 @@ pae_phydat
 parsi <- pae_phydat |>
   phangorn::pratchet()
 
-parsi |> class()
+parsi
 
 ## Gráfico ----
 
 parsi |>
   ggtree::ggtree(layout = "circular",
                  color = "black",
-                 linewidth = 1) +
+                 linewidth = 0.75) +
   ggtree::geom_tiplab(size = 5)
