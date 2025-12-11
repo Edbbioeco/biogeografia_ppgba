@@ -16,7 +16,7 @@ library(ggtree)
 
 ## Importando ----
 
-linhas <- read_lines("tsab_a_2039796_sm0766.xyd")
+linhas <- readr::read_lines("tsab_a_2039796_sm0766.xyd")
 
 ## Visualizando ----
 
