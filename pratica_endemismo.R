@@ -103,7 +103,10 @@ valoes_we <- grade_id |>
 
 grade_id_we <- grade |>
   dplyr::left_join(valoes_we,
-                   by = "id")
+                   by = "id") |>
+  dplyr::mutate(Area = dplyr::case_when(WE >= 500 ~ "Endemismo",
+                                        WE < 500 ~ "ground",
+                                        .default = NA))
 
 grade_id_we
 
@@ -113,6 +116,11 @@ ggplot() +
   geom_sf(data = grade_id_we, aes(color = WE, fill = WE)) +
   scale_color_viridis_c(na.value = "transparent") +
   scale_fill_viridis_c(na.value = "transparent")
+
+ggplot() +
+  geom_sf(data = grade_id_we, aes(color = Area, fill = Area)) +
+  scale_color_viridis_d(na.value = "transparent", direction = -1) +
+  scale_fill_viridis_d(na.value = "transparent", direction = -1)
 
 # Endemismo com o pacote phyloraster ----
 
