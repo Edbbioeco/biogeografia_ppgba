@@ -22,7 +22,9 @@ library(sampbias)
 
 # Dados ----
 
-## Importando ----
+## Registros de ocorrência ----
+
+### Importando ----
 
 gbif <- data.table::fread("SpiroBR.csv",
                           h = T,
@@ -30,13 +32,13 @@ gbif <- data.table::fread("SpiroBR.csv",
                           quote = "")  |>
   tibble::as_tibble()
 
-## Visualizando ----
+### Visualizando ----
 
 gbif
 
 gbif |> dplyr::glimpse()
 
-## Tratando ----
+### Tratando ----
 
 gbif_trat <- gbif |>
   dplyr::select(taxonRank,
@@ -339,10 +341,28 @@ beta_rasters |> plot()
 ## Visualizando ----
 
 ggplot() +
+  geom_sf(data = estados, fill = "gray") +
   tidyterra::geom_spatraster(data = beta_rasters) +
-  geom_sf(data = estados, fill = NA) +
   facet_wrap(~lyr) +
-  scale_fill_viridis_c()
+  scale_fill_viridis_c(na.value = "transparent")
+
+ggplot() +
+  geom_sf(data = estados, fill = "gray") +
+  tidyterra::geom_spatraster(data = beta_rasters[[1]]) +
+  facet_wrap(~lyr) +
+  scale_fill_viridis_c(na.value = "transparent")
+
+ggplot() +
+  geom_sf(data = estados, fill = "gray") +
+  tidyterra::geom_spatraster(data = beta_rasters[[2]]) +
+  facet_wrap(~lyr) +
+  scale_fill_viridis_c(na.value = "transparent")
+
+ggplot() +
+  geom_sf(data = estados, fill = "gray") +
+  tidyterra::geom_spatraster(data = beta_rasters[[3]]) +
+  facet_wrap(~lyr) +
+  scale_fill_viridis_c(na.value = "transparent")
 
 # Vieses de amosragem ----
 
