@@ -387,17 +387,17 @@ bias.out
 
 bias.out |> dplyr::glimpse()
 
-bias.out |> plot()
-
 ## Projetar os resultados ----
 
-proj <- bias.out |> sampbias::project_bias()
+proj <- bias.out |> sampbias::project_bias() |>
+  terra::crop(br) |>
+  terra::mask(br)
 
 proj
 
 ggplot() +
   tidyterra::geom_spatraster(data = proj) +
-  scale_fill_viridis_c() +
+  scale_fill_viridis_c(na.value = "transparent") +
   facet_wrap(~lyr)
 
 ## Mpas de viéses ----
