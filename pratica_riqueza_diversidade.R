@@ -203,7 +203,31 @@ ggplot() +
   tidyterra::geom_spatraster(data = br_riqueza_rast) +
   scale_fill_viridis_c(na.value = "transparent")
 
-# PASSO 6 - CALCULANDO DIVERSIDADE-BETA E VISUALIZANDO O RESULTADO
+# Diversidade beta ----
+
+## Matriz de presença-ausência ----
+
+gbif_matriz <- gbif_sf_trat |>
+  sf::st_join(br_grid) |>
+  sf::st_drop_geometry() |>
+  dplyr::mutate(Presenca = 1) |>
+  tidyr::pivot_wider(names_from = species,
+                     values_from = Presenca,
+                     values_fill = 0,
+                     values_fn = ~max(.))
+
+gbif_matriz
+
+
+
+
+
+
+
+
+
+
+
 
 # Matriz comunidade: células × espécies (presença/ausência)
 mat_pa <- occ_id %>%
@@ -241,7 +265,7 @@ beta_df <- data.frame(
 )
 
 #Convertendo o resultado para raster
-r_beta_total <- world_id
+r_beta_total <- world_id |> plot()
 r_beta_total[] <- beta_df$beta_total[match(world_id[], beta_df$id_cell)]
 
 r_turnover <- world_id
