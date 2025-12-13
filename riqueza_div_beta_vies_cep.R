@@ -92,6 +92,30 @@ uc_cep_vec <- uc_cep |>
 
 uc_cep_vec
 
+## Capitais ----
+
+### Importando ----
+
+capitais <- geobr::read_municipality() |>
+  dplyr::filter(name_muni %in% c("Maceió",
+                                 "Recife",
+                                 "João Pessoa",
+                                 "Natal"))
+
+### Visualizando ----
+
+capitais
+
+ggplot() +
+  geom_sf(data = capitais)
+
+### Vetorixando ----
+
+capitais_vec <- capitais |>
+  terra::vect()
+
+capitais_vec
+
 # Riqueza ----
 
 ## Valores de riqueza por gride ----
@@ -264,3 +288,43 @@ ggplot() +
                        na.value = "transparent")
 
 # Vi[es de amostragem ----
+
+## Definindo os Gazetteers ----
+
+gazetteers <- list(`Unidades de Conservação` = uc_cep_vec,
+                   Capitais = capitais_vec)
+
+gazetteers
+
+## Análise com resolução de 2.0 (~ 200km) e sem definir uma máscara aos dados ----
+
+
+bias.out <- sampbias::calculate_bias(x = registros |>
+                                       dplyr::select(5:6) |>
+                                       dplyr::rename("decimalLongitude" = Longitude,
+                                                     "decimalLatitude" = Latitude),
+                                     gaz = gazetteers,
+                                     res = terra::res(cep_riqueza_rast)[1],
+                                     plot_raster = TRUE)
+
+bias.out
+
+bias.out |> dplyr::glimpse()
+
+## Projetar os resultados ----
+
+proj <- bias.out |>
+  sampbias::project_bias() |>
+  terra::crop(cep) |>
+  terra::mask(cep)
+
+proj
+
+ggplot() +
+  tidyterra::geom_spatraster(data = proj) +
+  scale_fill_viridis_c(na.value = "transparent") +
+  facet_wrap(~lyr)
+
+## Mpas de viéses ----
+
+proj |> sampbias::map_bias(type = "log_sampling_rate")
