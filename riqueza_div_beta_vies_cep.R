@@ -4,13 +4,9 @@ library(readxl)
 
 library(tidyverse)
 
-library(CoordinateCleaner)
-
-library(geobr)
-
 library(sf)
 
-library(writexl)
+library(geobr)
 
 library(terra)
 
@@ -34,11 +30,30 @@ registros
 
 registros |> dplyr::glimpse()
 
+### Convertendo em shapefile ----
+
+registros_sf <- registros |>
+  sf::st_as_sf(coords = c("Longitude", "Latitude"),
+               crs = 4674)
+
+registros_sf
+
+ggplot() +
+  geom_sf(data = registros_sf)
+
 ## CEP ----
 
 ### Importando ----
 
-### Visualizando ----
+cep <- sf::st_read("grade_cep.shp")
+
+### Visualizando -----
+
+cep
+
+ggplot() +
+  geom_sf(data = cep) +
+  geom_sf(data = registros_sf)
 
 ## Unidades de conservação ----
 
