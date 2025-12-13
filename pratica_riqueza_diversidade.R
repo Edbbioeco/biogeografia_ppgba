@@ -402,7 +402,8 @@ bias.out |> dplyr::glimpse()
 
 ## Projetar os resultados ----
 
-proj <- bias.out |> sampbias::project_bias() |>
+proj <- bias.out |>
+  sampbias::project_bias() |>
   terra::crop(br) |>
   terra::mask(br)
 
