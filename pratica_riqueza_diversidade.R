@@ -239,14 +239,25 @@ ggplot() +
 
 ## Rasterizando ----
 
+resolucao <- br_grid_trat[1, ] |>
+  terra::vect() |>
+  terra::ext()
+
+resolucao
+
 vetor <- br_grid_trat |>
   terra::vect() |>
   terra::ext() |>
-  terra::rast(res = 0.5)
+  terra::rast(res = c((resolucao$xmax - resolucao$xmin),
+                      (resolucao$ymax - resolucao$ymin)))
+
+vetor
 
 br_riqueza_rast <- br_grid_trat |>
   terra::vect() |>
   terra::rasterize(vetor, field = "Riqueza")
+
+br_riqueza_rast
 
 ggplot() +
   tidyterra::geom_spatraster(data = br_riqueza_rast) +
