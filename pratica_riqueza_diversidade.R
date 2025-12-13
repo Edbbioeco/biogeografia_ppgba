@@ -317,6 +317,8 @@ beta_df <- data.frame(id = gbif_matriz$id,
 
 beta_df
 
+beta_df |> dplyr::glimpse()
+
 ## Rasterizando os três componentes ----
 
 rasters_beta <- function(componente){
