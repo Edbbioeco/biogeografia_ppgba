@@ -145,4 +145,122 @@ ggplot() +
 
 ## Criando uma matriz de dissimilaridade ----
 
+matriz_beta <- registros_sf |>
+  sf::st_join(cep) |>
+  sf::st_drop_geometry() |>
+  dplyr::select(-c(1, 4)) |>
+  tidyr::pivot_wider(names_from = species,
+                     values_from = presence,
+                     values_fill = 0,
+                     values_fn = ~max(.)) |>
+  tibble::column_to_rownames(var = "FID")
+
+matriz_beta
+
+matriz_beta |> dplyr::glimpse()
+
+## Calculando a diversidade beta de Jaccard ----
+
+beta_calc <- matriz_beta |>
+  betapart::betapart.core()
+
+beta_calc
+
+beta_pair <- matriz_beta |>
+  beta.pair(index.family = "jaccard")
+
+beta_pair
+
+## Ajustando as matrizes para os componentes de diversidade beta ----
+
+beta_sor <- beta_pair$beta.jac |> as.matrix()
+
+beta_tur <- beta_pair$beta.jtu |> as.matrix()
+
+beta_sne <- beta_pair$beta.jne |>  as.matrix()
+
+## Valores médios por célula ----
+
+beta_sor_mean <- beta_sor |> rowMeans(na.rm = TRUE)
+
+beta_tur_mean <- beta_tur |> rowMeans(na.rm = TRUE)
+
+beta_sne_mean <- beta_sne |> rowMeans(na.rm = TRUE)
+
+beta_df <- data.frame(id = matriz_beta |> rownames() |> as.numeric(),
+                      jaccard = beta_sor_mean,
+                      turnover = beta_tur_mean,
+                      nestedness = beta_sne_mean)
+
+beta_df
+
+beta_df |> dplyr::glimpse()
+
+## Rasterizando os três componentes ----
+
+rasters_beta <- function(componente){
+
+  rast_beta <- cep |>
+    dplyr::rename("id" = FID) |>
+    dplyr::left_join(beta_df,
+                     by = "id") |>
+    terra::vect() |>
+    terra::rasterize(cep_vetor, field = componente)
+
+  assign(paste0("raster_beta_", componente),
+         rast_beta,
+         envir = globalenv())
+
+}
+
+componentes <- beta_df[-1] |> names()
+
+componentes
+
+purrr::walk(componentes, rasters_beta)
+
+## Unindo os rasters ----
+
+beta_rasters <- ls(pattern = "raster_beta_") |>
+  mget(envir = globalenv()) |>
+  terra::rast()
+
+beta_rasters
+
+beta_rasters |> plot()
+
+## Visualizando ----
+
+ggplot() +
+  geom_sf(data = cep, fill = "gray") +
+  tidyterra::geom_spatraster(data = beta_rasters) +
+  geom_sf(data = cep, fill = NA, color = "black") +
+  facet_wrap(~lyr) +
+  scale_fill_viridis_c(option = "turbo",
+                       na.value = "transparent")
+
+ggplot() +
+  geom_sf(data = cep, fill = "gray") +
+  tidyterra::geom_spatraster(data = beta_rasters[[1]]) +
+  geom_sf(data = cep, fill = NA, color = "black") +
+  facet_wrap(~lyr) +
+  scale_fill_viridis_c(option = "turbo",
+                       na.value = "transparent")
+
+ggplot() +
+  geom_sf(data = cep, fill = "gray") +
+  tidyterra::geom_spatraster(data = beta_rasters[[2]]) +
+  geom_sf(data = cep, fill = NA, color = "black") +
+  facet_wrap(~lyr) +
+  scale_fill_viridis_c(option = "turbo",
+                       na.value = "transparent")
+
+ggplot() +
+  geom_sf(data = cep, fill = "gray") +
+  tidyterra::geom_spatraster(data = beta_rasters[[3]]) +
+  geom_sf(data = cep, fill = NA, color = "black") +
+  facet_wrap(~lyr) +
+  scale_fill_viridis_c(option = "turbo",
+                       na.value = "transparent")
+
 # Vi[es de amostragem ----
