@@ -31,7 +31,9 @@ usethis::git_default_branch_rename(from = "master", to = "main")
 
 # Commit ----
 
-gert::git_add("configurar_github.R")
+gert::git_push(force = TRUE)
+
+gert::git_add("")
 
 gert::git_commit("Commit para alterar o README")
 
