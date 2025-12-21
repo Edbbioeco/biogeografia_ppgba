@@ -2,6 +2,14 @@
 
 library(usethis)
 
+library(gert)
+
+# Inicializando ----
+
+usethis::use_git()
+
+usethis::use_github_links()
+
 # Dados ----
 
 usethis::use_git_config(user.name = "Edbbioeco",
@@ -10,12 +18,6 @@ usethis::use_git_config(user.name = "Edbbioeco",
 # Configurando token ----
 
 usethis::create_github_token()
-
-# Inicializando ----
-
-usethis::use_git()
-
-usethis::use_github_links()
 
 # Setando o repositório ----
 
