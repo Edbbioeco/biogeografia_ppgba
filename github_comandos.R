@@ -4,7 +4,7 @@ library(gert)
 
 # Selecionando o arquivo ----
 
-gert::git_add("configurar_github.R")
+gert::git_add("github_comandos.R")
 
 # Commitando ----
 
@@ -12,7 +12,7 @@ gert::git_commit("Script de comandos de git")
 
 # Pushando ----
 
-gert::git_push()
+gert::git_push(remote = "origin", force = TRUE)
 
 # Pullando ----
 

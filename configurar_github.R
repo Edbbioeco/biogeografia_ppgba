@@ -2,36 +2,34 @@
 
 library(usethis)
 
-library(gert)
-
-# Inicializando ----
+# Iniciando ----
 
 usethis::use_git()
 
-usethis::use_github_links()
-
-# Dados ----
+# Configure o usuario e email ----
 
 usethis::use_git_config(user.name = "Edbbioeco",
                         user.email = "edsonbbiologia@gmail.com")
 
-# Configurando token ----
+# Settando o repositório ----
 
-usethis::create_github_token()
+usethis::proj_get()
 
-# Setando o repositório ----
+usethis::use_git()
 
 usethis::use_git_remote(name = "origin",
-                        url = "https://github.com/Edbbioeco/biogeografia_ppgba",
+                        url = "https://github.com/Edbbioeco/biogeografia_ppgba.git",
                         overwrite = TRUE)
 
-# Sincronizando os arquivos ----
+# Renomear o branch do master para main ----
 
 usethis::git_default_branch_rename(from = "master", to = "main")
 
 # Commit ----
 
-gert::git_add("configurar_github.R")
+gert::git_push(force = TRUE)
+
+gert::git_add("")
 
 gert::git_commit("Commit para alterar o README")
 
