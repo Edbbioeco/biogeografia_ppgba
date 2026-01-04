@@ -4,11 +4,11 @@ library(gert)
 
 # Selecionando o arquivo ----
 
-gert::git_add("github_comandos.R")
+gert::git_add(list.files(pattern = ".png")) |> as.data.frame()
 
 # Commitando ----
 
-gert::git_commit("Script de comandos de git")
+gert::git_commit("Figuras")
 
 # Pushando ----
 
