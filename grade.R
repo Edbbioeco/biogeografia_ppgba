@@ -62,8 +62,7 @@ cep |>
 ## Criando a grade ----
 
 grade <- cep |>
-  sf::st_transform(crs = 32725) |>
-  sf::st_make_grid(cellsize = 10000) |>
+  sf::st_make_grid(cellsize = (10 / 111.3194)) |>
   sf::st_make_valid()
 
 ## Visualizando ----
@@ -72,16 +71,16 @@ grade
 
 ggplot() +
   geom_sf(data = grade, color = "black", fill = "green4") +
-  geom_sf(data = cep |>
-            sf::st_transform(crs = 32725), color = "red", fill = "transparent")
+  geom_sf(data = cep, fill = "transparent")
 
 ## Recorte ----
 
 ### Recortando ----
 
-grade_cep <- grade[grade |>
-                     sf::st_intersection(cep |>
-                                           sf::st_transform(crs = 32725))]
+grade_cep <- grade |>
+  sf::st_sf() |>
+  sf::st_join(cep) |>
+  tidyr::drop_na()
 
 ### Visualizando ----
 
@@ -95,5 +94,6 @@ grade_cep |>
 
 grade_cep |>
   sf::st_transform(crs = 4674) |>
-  sf::st_write("grade_cep.shp")
+  sf::st_write("grade_cep.shp",
+               append = FALSE)
 
