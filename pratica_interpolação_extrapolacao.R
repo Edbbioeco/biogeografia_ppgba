@@ -89,7 +89,8 @@ gbif_trat <- gbif |>
                   !is.na(decimalLatitude) &
                   basisOfRecord %in% c("HUMAN_OBSERVATION",
                                        "OBSERVATION",
-                                       "MACHINE_OBSERVATION","PRESERVED_SPECIMEN")) |>
+                                       "MACHINE_OBSERVATION",
+                                       "PRESERVED_SPECIMEN")) |>
   dplyr::distinct(decimalLongitude, decimalLatitude, .keep_all = TRUE)
 
 gbif_trat
@@ -411,12 +412,12 @@ sdm_modelo
 
 ## Exportando o modelo ----
 
-sdm_modelo |> sdm::write.sdm("modelo_aquarana.sdm",
+sdm_modelo |> sdm::write.sdm("modelo_lithobates.sdm",
                              overwrite = TRUE)
 
 ## Predição ----
 
-sdm_modelo <- sdm::read.sdm("modelo_aquarana.sdm")
+sdm_modelo <- sdm::read.sdm("modelo_lithobates.sdm")
 
 sdm_modelo
 
@@ -438,13 +439,13 @@ ggplot() +
 
 ## Ensemble do modelo ----
 
-### Dataframe da imagem da aquarana ----
+### Dataframe da imagem da lithobates ----
 
-aquarana_df <- tibble::tibble(x = -40,
+lithobates_df <- tibble::tibble(x = -40,
                               y = 9.5,
-                              img = "aquarana_catesbeiana.png")
+                              img = "lithobates_catesbeiana.png")
 
-aquarana_df
+lithobates_df
 
 ### Por AUC ----
 
@@ -463,7 +464,7 @@ sdm_ensemble_auc
 ggplot() +
   tidyterra::geom_spatraster(data = sdm_ensemble_auc) +
   geom_sf(data = america_sul, color = "black", fill = NA, linewidth = 1) +
-  labs(title = "Adequabilidade ambiental de <i>Aquarana castebeina</i> na América do Sul, baseado em AUC",
+  labs(title = "Adequabilidade ambiental de <i>Lithobates catsebeianus</i> na América do Sul, baseado em AUC",
        x = NULL,
        y = NULL,
        fill = "Adequabilidade Ambiental") +
@@ -473,7 +474,7 @@ ggplot() +
                                               frame.colour = "black",
                                               ticks.colour = "black",
                                               barheight = 20)) +
-  ggimage::geom_image(data = aquarana_df, aes(x, y, image = img),
+  ggimage::geom_image(data = lithobates_df, aes(x, y, image = img),
                       size = 0.2) +
   theme_minimal() +
   theme(plot.title = ggtext::element_markdown(size = 15, hjust = 0.5),
@@ -482,7 +483,7 @@ ggplot() +
         legend.title = element_text(size = 15, color = "black")) +
   ggview::canvas(height = 10, width = 12)
 
-ggsave(filename = "aquarana_modelo_auc.png", height = 10, width = 12)
+ggsave(filename = "lithobates_modelo_auc.png", height = 10, width = 12)
 
 ### Por TSS ----
 
@@ -501,7 +502,7 @@ sdm_ensemble_tss
 ggplot() +
   tidyterra::geom_spatraster(data = sdm_ensemble_tss) +
   geom_sf(data = america_sul, color = "black", fill = NA, linewidth = 1) +
-  labs(title = "Adequabilidade ambiental de <i>Aquarana castebeina</i> na América do Sul, baseado em TSS",
+  labs(title = "Adequabilidade ambiental de <i>Lithobates catsebeianus</i> na América do Sul, baseado em TSS",
        x = NULL,
        y = NULL,
        fill = "Adequabilidade Ambiental") +
@@ -511,7 +512,7 @@ ggplot() +
                                               frame.colour = "black",
                                               ticks.colour = "black",
                                               barheight = 20)) +
-  ggimage::geom_image(data = aquarana_df, aes(x, y, image = img),
+  ggimage::geom_image(data = lithobates_df, aes(x, y, image = img),
                       size = 0.2) +
   theme_minimal() +
   theme(plot.title = ggtext::element_markdown(size = 15, hjust = 0.5),
@@ -520,7 +521,7 @@ ggplot() +
         legend.title = element_text(size = 15, color = "black")) +
   ggview::canvas(height = 10, width = 12)
 
-ggsave(filename = "aquarana_modelo_tss.png", height = 10, width = 12)
+ggsave(filename = "lithobates_modelo_tss.png", height = 10, width = 12)
 
 # Pós-Modelagem ----
 
@@ -569,14 +570,14 @@ area_nicho_ensemble
 ggplot() +
   geom_sf(data = area_nicho_ensemble, aes(fill = tipo, color = tipo))+
   geom_sf(data = america_sul, color = "black", fill = NA, linewidth = 1) +
-  labs(title = "Área de nicho de <i>Aquarana castebeina</i> na América do Sul",
+  labs(title = "Área de nicho de <i>Lithobates catsebeianus</i> na América do Sul",
        x = NULL,
        y = NULL,
        fill = NULL,
        color = NULL) +
   scale_fill_viridis_d() +
   scale_color_viridis_d() +
-  ggimage::geom_image(data = aquarana_df, aes(x, y, image = img),
+  ggimage::geom_image(data = lithobates_df, aes(x, y, image = img),
                       size = 0.2) +
   theme_minimal() +
   theme(plot.title = ggtext::element_markdown(size = 15, hjust = 0.5),
@@ -585,7 +586,7 @@ ggplot() +
         legend.title = element_text(size = 15, color = "black")) +
   ggview::canvas(height = 10, width = 12)
 
-ggsave(filename = "aquarana_modelo_area_nicho_ensemble.png", height = 10, width = 12)
+ggsave(filename = "lithobates_modelo_area_nicho_ensemble.png", height = 10, width = 12)
 
 ### Com threshold menor ----
 
@@ -602,14 +603,14 @@ area_nicho_predict
 ggplot() +
   geom_sf(data = area_nicho_predict, aes(fill = tipo, color = tipo))+
   geom_sf(data = america_sul, color = "black", fill = NA, linewidth = 1) +
-  labs(title = "Área de nicho de <i>Aquarana castebeina</i> na América do Sul",
+  labs(title = "Área de nicho de <i>Lithobates catsebeianus</i> na América do Sul",
        x = NULL,
        y = NULL,
        fill = NULL,
        color = NULL) +
   scale_fill_viridis_d() +
   scale_color_viridis_d() +
-  ggimage::geom_image(data = aquarana_df, aes(x, y, image = img),
+  ggimage::geom_image(data = lithobates_df, aes(x, y, image = img),
                       size = 0.2) +
   theme_minimal() +
   theme(plot.title = ggtext::element_markdown(size = 15, hjust = 0.5),
@@ -618,4 +619,4 @@ ggplot() +
         legend.title = element_text(size = 15, color = "black")) +
   ggview::canvas(height = 10, width = 12)
 
-ggsave(filename = "aquarana_modelo_area_nicho_predict.png", height = 10, width = 12)
+ggsave(filename = "lithobates_modelo_area_nicho_predict.png", height = 10, width = 12)
