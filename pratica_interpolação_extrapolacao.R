@@ -210,9 +210,11 @@ elev_sul <- elevatr::get_elev_raster(locations = america_sul |>
 
 elev_sul
 
-elev_norte |> terra::writeRaster("elev_norte.tif")
+elev_norte |> terra::writeRaster("elev_norte.tif",
+                                 overwrite = TRUE)
 
-elev_sul |> terra::writeRaster("elev_sul.tif")
+elev_sul |> terra::writeRaster("elev_sul.tif",
+                               overwrite = TRUE)
 
 ### Visualizando ----
 
@@ -443,7 +445,7 @@ ggplot() +
 
 lithobates_df <- tibble::tibble(x = -40,
                               y = 9.5,
-                              img = "lithobates_catesbeiana.png")
+                              img = "lithobates_catesbeianus.png")
 
 lithobates_df
 
@@ -521,7 +523,8 @@ ggplot() +
         legend.title = element_text(size = 15, color = "black")) +
   ggview::canvas(height = 10, width = 12)
 
-ggsave(filename = "lithobates_modelo_tss.png", height = 10, width = 12)
+ggsave(filename = "lithobates_modelo_tss.png",
+       height = 10, width = 12)
 
 # Pós-Modelagem ----
 
@@ -586,7 +589,8 @@ ggplot() +
         legend.title = element_text(size = 15, color = "black")) +
   ggview::canvas(height = 10, width = 12)
 
-ggsave(filename = "lithobates_modelo_area_nicho_ensemble.png", height = 10, width = 12)
+ggsave(filename = "lithobates_modelo_area_nicho_ensemble.png",
+       height = 10, width = 12)
 
 ### Com threshold menor ----
 
@@ -619,4 +623,5 @@ ggplot() +
         legend.title = element_text(size = 15, color = "black")) +
   ggview::canvas(height = 10, width = 12)
 
-ggsave(filename = "lithobates_modelo_area_nicho_predict.png", height = 10, width = 12)
+ggsave(filename = "lithobates_modelo_area_nicho_predict.png",
+       height = 10, width = 12)
