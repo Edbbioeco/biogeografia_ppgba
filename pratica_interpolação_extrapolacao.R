@@ -152,15 +152,26 @@ ggplot() +
 siglas_paises <- ls(pattern = "^america_") |>
   mget(envir = globalenv()) |>
   dplyr::bind_rows() |>
-  dplyr::pull(sov_a3)
+  dplyr::pull(iso_a3)
 
 siglas_paises
 
 ### Importando ----
 
-bioclim <- geodata::worldclim_global(var = "bio",
-                                     res = 2.5,
-                                     path = getwd())
+importar_bioclim <- function(siglas_paises){
+
+  bioclim <- geodata::worldclim_country(var = "bio",
+                                        res = 0.5,
+                                        country = siglas_paises,
+                                        path = getwd())
+
+  assign(paste0("bioclim_", siglas_paises |> stringr::str_to_lower()),
+         bioclim,
+         envir = globalenv())
+
+}
+
+purrr::map(siglas_paises, importar_bioclim)
 
 ### Visualizando ----
 
