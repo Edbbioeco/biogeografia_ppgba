@@ -60,7 +60,7 @@ america_sul <- rnaturalearth::ne_countries() |>
 america_sul
 
 ggplot() +
-  geom_sf(data = america_sul)
+  geom_sf(data = america_sul, color = "black")
 
 ## Ocorrência de Espécies ----
 
