@@ -215,6 +215,8 @@ occ_raster |>
 
 occ_raster <- terra::rast("occ_raster.tif")
 
+## Inverso da área de ocorrência ----
+
 ## Calculando EA através do pacote phyloraster ----
 
 we_raster <- phyloraster::rast.we(occ_raster,
