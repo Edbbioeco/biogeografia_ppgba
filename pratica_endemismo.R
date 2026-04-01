@@ -221,6 +221,27 @@ occ_raster <- terra::rast("occ_raster.tif")
 
 inv_area <- occ_raster |> phyloraster::inv.range()
 
+### Visualizando ----
+
+visualizar_invarea <- function(id){
+
+  ggplot() +
+    tidyterra::geom_spatraster(data = inv_area[[id]]) +
+    scale_fill_viridis_c(na.value = "transparent") +
+    facet_wrap(~lyr) +
+    theme_minimal() +
+    theme(strip.text = element_text(color = "black",
+                                    size = 12,
+                                    face = "italic"))
+
+}
+
+id <- 1:terra::nlyr(inv_area)
+
+id
+
+purrr::map(id, visualizar_invarea)
+
 ## Calculando EA através do pacote phyloraster ----
 
 we_raster <- phyloraster::rast.we(occ_raster,
