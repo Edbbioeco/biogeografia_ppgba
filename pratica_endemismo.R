@@ -218,15 +218,14 @@ occ_raster <- terra::rast("occ_raster.tif")
 ## Calculando EA através do pacote phyloraster ----
 
 we_raster <- phyloraster::rast.we(occ_raster,
-                                   occ_raster |> phyloraster::inv.range())
+                                  occ_raster |> phyloraster::inv.range())
 
 we_raster
 
-we_raster |> plot()
-
 ggplot() +
   tidyterra::geom_spatraster(data = we_raster) +
-  scale_fill_viridis_c(na.value = "transparent")
+  scale_fill_viridis_c(na.value = "transparent") +
+  theme_minimal()
 
 ## Calculando EA padronizado pela riqueza de espécies através do pacote phyloraster ----
 
