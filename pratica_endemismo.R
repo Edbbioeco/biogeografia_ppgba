@@ -165,7 +165,12 @@ multiplos_rasters <- function(especie){
     terra::vect() |>
     terra::rasterize(raster_inicial, field = "presenca")
 
-  raster_sps |> plot()
+  ggplot() +
+    tidyterra::geom_spatraster(data = raster_sps) +
+    scale_fill_viridis_c(na.value = "transparent") +
+    labs(title = especie) +
+    theme_minimal() +
+    theme(title = element_text(color = "black", size = 20))
 
   assign(paste0("raster_occ_", especie),
          raster_sps,
