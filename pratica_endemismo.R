@@ -191,10 +191,13 @@ occ_raster <- ls(pattern = "raster_occ_") |>
 
 occ_raster
 
+names(occ_raster) <- especie |>
+  stringr::str_extract("(?<=\\[).*?(?=\\])")
+
 visualizar_raster <- function(id){
 
   ggplot() +
-    tidyterra::geom_spatraster(data = occ_raster[[id]]) +
+    tidyterra::geom_spatraster(data = occ_raster[[1]]) +
     scale_fill_viridis_c(na.value = "transparent") +
     facet_wrap(~lyr) +
     theme_minimal() +
