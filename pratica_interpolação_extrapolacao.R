@@ -147,6 +147,15 @@ ggplot() +
 
 ## Variáveis ambientais ----
 
+### Siglas dos países ----
+
+siglas_paises <- ls(pattern = "^america_") |>
+  mget(envir = globalenv()) |>
+  dplyr::bind_rows() |>
+  dplyr::pull(sov_a3)
+
+siglas_paises
+
 ### Importando ----
 
 bioclim <- geodata::worldclim_global(var = "bio",
