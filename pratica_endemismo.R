@@ -165,11 +165,6 @@ multiplos_rasters <- function(especie){
     terra::vect() |>
     terra::rasterize(raster_inicial, field = "presenca")
 
-  sps <- especie |>
-    stringr::str_extract("(?<=\\[).*?(?=\\])")
-
-  names(raster_sps) <- sps
-
   assign(paste0("raster_occ_", especie),
          raster_sps,
          envir = globalenv())
