@@ -58,7 +58,7 @@ grade_id
 
 abg_sps <- grade_id |>
   sf::st_drop_geometry() |>
-  dplyr::summarise(celulas = dplyr::n_distinct(FID),
+  dplyr::summarise(celulas = dplyr::n_distinct(Assemblage),
                    .by = species)
 
 abg_sps
@@ -70,7 +70,7 @@ valores_we <- grade_id |>
   dplyr::left_join(abg_sps,
                    by = "species") |>
   dplyr::summarise(WE = sum(1 / celulas),
-                   .by = FID)
+                   .by = Assemblage)
 
 valores_we
 
@@ -80,7 +80,7 @@ valores_we
 
 grade_id_we <- grade |>
   dplyr::left_join(valores_we,
-                   by = "FID") |>
+                   by = "Assemblage") |>
   dplyr::mutate(Area = dplyr::case_when(WE >= 10 ~ "Endemismo",
                                         WE < 10 ~ "ground",
                                         .default = NA))
