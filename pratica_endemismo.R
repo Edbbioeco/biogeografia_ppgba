@@ -257,7 +257,7 @@ ggplot() +
 ## Calculando EA padronizado pela riqueza de espécies através do pacote phyloraster ----
 
 we_raster_ses <- phyloraster::rast.we.ses(occ_raster,
-                                          occ_raster |> phyloraster::inv.range())
+                                          inv_area)
 
 we_raster_ses
 
