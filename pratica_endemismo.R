@@ -60,7 +60,7 @@ ggplot() +
 
 grade <- df_sf |>
   sf::st_make_grid(cellsize = c(6.500, 6.980),
-                          offset = c(-96.000, -48.000)) |>
+                   offset = c(-96.000, -48.000)) |>
   sf::st_as_sf() |>
   dplyr::mutate(id = dplyr::row_number())
 
