@@ -191,7 +191,24 @@ occ_raster <- ls(pattern = "raster_occ_") |>
 
 occ_raster
 
-occ_raster |> plot()
+visualizar_raster <- function(id){
+
+  ggplot() +
+    tidyterra::geom_spatraster(data = occ_raster[[id]]) +
+    scale_fill_viridis_c(na.value = "transparent") +
+    facet_wrap(~lyr) +
+    theme_minimal() +
+    theme(strip.text = element_text(color = "black",
+                               size = 12,
+                               face = "italic"))
+
+}
+
+id <- 1:terra::nlyr(occ_raster)
+
+id
+
+purrr::map(id, visualizar_raster)
 
 ## Exportando ----
 
