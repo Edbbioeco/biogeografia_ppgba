@@ -245,7 +245,7 @@ purrr::map(id, visualizar_invarea)
 ## Calculando EA através do pacote phyloraster ----
 
 we_raster <- phyloraster::rast.we(occ_raster,
-                                  occ_raster |> phyloraster::inv.range())
+                                  inv_area)
 
 we_raster
 
