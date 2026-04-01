@@ -168,14 +168,7 @@ multiplos_rasters <- function(especie){
   sps <- especie |>
     stringr::str_extract("(?<=\\[).*?(?=\\])")
 
-  ggplot() +
-    tidyterra::geom_spatraster(data = raster_sps) +
-    scale_fill_viridis_c(na.value = "transparent") +
-    labs(title = sps) +
-    theme_minimal() +
-    theme(title = element_text(color = "black",
-                               size = 20,
-                               face = "italic"))
+  names(raster_sps) <- sps
 
   assign(paste0("raster_occ_", especie),
          raster_sps,
