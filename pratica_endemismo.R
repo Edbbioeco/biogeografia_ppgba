@@ -173,7 +173,9 @@ multiplos_rasters <- function(especie){
     scale_fill_viridis_c(na.value = "transparent") +
     labs(title = sps) +
     theme_minimal() +
-    theme(title = element_text(color = "black", size = 20))
+    theme(title = element_text(color = "black",
+                               size = 20,
+                               face = "italic"))
 
   assign(paste0("raster_occ_", especie),
          raster_sps,
