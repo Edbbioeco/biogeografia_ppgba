@@ -26,9 +26,10 @@ registros |> dplyr::glimpse()
 
 ## Transformando as ocorrencias em um shapefile ----
 
-registros_sf <-registros |>
+registros_sf <- registros |>
   sf::st_as_sf(coords = c("Longitude", "Latitude"),
-               crs = 4674)
+               crs = 4674) |>
+  dplyr::mutate(Assemblage = Assemblage |> as.character())
 
 registros_sf
 
@@ -47,8 +48,8 @@ ggplot() +
 
 ## Calculando a intersecção ----
 
-grade_id <- registros_sf |>
-  sf::st_join(grade)
+grade_id <- grade |>
+  sf::st_join(registros_sf)
 
 grade_id
 
@@ -78,7 +79,7 @@ valores_we
 
 ### Unindo os valores ----
 
-grade_id_we <- grade |>
+grade_id_we <- grade_id |>
   dplyr::left_join(valores_we,
                    by = "Assemblage") |>
   dplyr::mutate(Area = dplyr::case_when(WE >= 10 ~ "Endemismo",
