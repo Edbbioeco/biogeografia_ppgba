@@ -46,7 +46,7 @@ america_norte <- rnaturalearth::ne_countries() |>
 america_norte
 
 ggplot() +
-  geom_sf(data = america_norte)
+  geom_sf(data = america_norte, color = "black")
 
 ## América do Sul ----
 
