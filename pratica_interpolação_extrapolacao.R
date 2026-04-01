@@ -99,6 +99,12 @@ ggplot() +
   geom_point(data = gbif_trat,
              aes(decimalLongitude, decimalLatitude))
 
+### Definindo a distância ----
+
+distancia <- (111.3194 / 60) * 2.5
+
+distancia
+
 ### Limpando os dados por distância de ~5km ----
 
 gbif_trat |>
