@@ -111,7 +111,7 @@ gbif_trat |>
   spThin::thin(lat.col = "decimalLatitude",
                long.col = "decimalLongitude",
                spec.col = "species",
-               thin.par = 5,
+               thin.par = distancia,
                reps = 5,
                out.dir = getwd())
 
