@@ -116,7 +116,11 @@ gbif_sf
 
 ggplot() +
   geom_sf(data = study_area) +
-  geom_sf(data = gbif_sf)
+  geom_sf(data = gbif_sf) +
+  coord_sf(xlim = c(gbif_sf |> sf::st_bbox() %>% .[1],
+                    gbif_sf |> sf::st_bbox() %>% .[3]),
+           ylim = c(gbif_sf |> sf::st_bbox() %>% .[2],
+                    gbif_sf |> sf::st_bbox() %>% .[4]))
 
 ### Filtrando pontos apenas dentro do continente ----
 
