@@ -234,8 +234,6 @@ we_raster_ses <- phyloraster::rast.we.ses(occ_raster,
 
 we_raster_ses
 
-we_raster_ses |> plot()
-
 ggplot() +
   tidyterra::geom_spatraster(data = we_raster_ses) +
   scale_fill_viridis_c(na.value = "transparent") +
