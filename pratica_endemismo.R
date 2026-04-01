@@ -188,7 +188,7 @@ especie <- df_occ$Espécie |> unique()
 
 especie
 
-purrr::walk(especie, multiplos_rasters)
+purrr::map(especie, multiplos_rasters)
 
 ## Unindo os rasters -----
 
