@@ -347,7 +347,7 @@ componentes <- beta_df[-1] |> names()
 
 componentes
 
-purrr::walk(componentes, rasters_beta)
+purrr::map(componentes, rasters_beta)
 
 ## Unindo os rasters ----
 
