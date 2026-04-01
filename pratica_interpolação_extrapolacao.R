@@ -135,8 +135,8 @@ gbif_sf <- gbif_thin |>
 gbif_sf
 
 ggplot() +
-  geom_sf(data = america_norte) +
-  geom_sf(data = america_sul) +
+  geom_sf(data = america_norte, color = "black") +
+  geom_sf(data = america_sul, color = "black") +
   geom_sf(data = gbif_sf)
 
 ## Variáveis ambientais ----
