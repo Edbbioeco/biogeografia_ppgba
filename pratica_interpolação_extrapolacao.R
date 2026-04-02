@@ -173,6 +173,24 @@ baixar_rasters_bioclim <- function(siglas_paises){
 
 purrr::map(siglas_paises, baixar_rasters_bioclim)
 
+### Importando ----
+
+importar_rasters_bioclim <- function(arquivos, siglas_paises){
+
+  bioclim <- terra::rast(arquivos)
+
+  assign(paste0("bioclim_", siglas_paises |> stringr::str_to_lower()),
+         bioclim,
+         envir = globalenv())
+
+}
+
+arquivos <- list.files(path = "climate/wc2.1_country/", full.names = TRUE)
+
+arquivos
+
+purrr::map2(arquivos, siglas_paises, importar_rasters_bioclim)
+
 ### Visualizando ----
 
 bioclim
