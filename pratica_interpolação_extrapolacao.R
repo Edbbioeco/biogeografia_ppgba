@@ -156,7 +156,7 @@ siglas_paises <- ls(pattern = "^america_") |>
 
 siglas_paises
 
-### Importando ----
+### Baixando ----
 
 importar_rasters_bioclim <- function(siglas_paises){
 
