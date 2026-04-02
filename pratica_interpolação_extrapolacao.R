@@ -175,9 +175,20 @@ purrr::map(siglas_paises, baixar_rasters_bioclim)
 
 ### Importando ----
 
+shapefile_america <- ls(pattern = "^america_") |>
+  mget(envir = globalenv()) |>
+  dplyr::bind_rows()
+
 importar_rasters_bioclim <- function(arquivos, siglas_paises){
 
   bioclim <- terra::rast(arquivos)
+
+  shapefile <- shapefile_america |>
+    dplyr::filter(.data$iso_a3 == siglas_paises)
+
+  bioclim <- bioclim |>
+    terra::crop(shapefile) |>
+    terra::mask(shapefile)
 
   assign(paste0("bioclim_", siglas_paises |> stringr::str_to_lower()),
          bioclim,
@@ -189,7 +200,9 @@ arquivos <- list.files(path = "climate/wc2.1_country/", full.names = TRUE)
 
 arquivos
 
-purrr::map2(arquivos, siglas_paises, importar_rasters_bioclim)
+purrr::map2(arquivos,
+            siglas_paises |> sort(),
+            importar_rasters_bioclim)
 
 ### Visualizando ----
 
