@@ -158,7 +158,7 @@ siglas_paises
 
 ### Baixando ----
 
-importar_rasters_bioclim <- function(siglas_paises){
+baixar_rasters_bioclim <- function(siglas_paises){
 
   bioclim <- geodata::worldclim_country(var = "bio",
                                         res = 0.5,
@@ -171,7 +171,7 @@ importar_rasters_bioclim <- function(siglas_paises){
 
 }
 
-purrr::map(siglas_paises, importar_rasters_bioclim)
+purrr::map(siglas_paises, baixar_rasters_bioclim)
 
 ### Visualizando ----
 
