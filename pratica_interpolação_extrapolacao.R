@@ -191,6 +191,8 @@ importar_rasters_bioclim <- function(arquivos, siglas_paises){
     terra::crop(shapefile) |>
     terra::mask(shapefile)
 
+  message(paste0("Raster bioclimático de ", siglas_paises, " importado e recortado"))
+
   assign(paste0("bioclim_", siglas_paises |> stringr::str_to_lower()),
          bioclim,
          envir = globalenv())
