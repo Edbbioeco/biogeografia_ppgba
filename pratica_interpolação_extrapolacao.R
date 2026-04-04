@@ -149,13 +149,13 @@ ggplot() +
 
 ### Siglas dos países ----
 
-siglas_paises <- ls(pattern = "^america_") |>
+nome_paises <- ls(pattern = "^america_") |>
   mget(envir = globalenv()) |>
   dplyr::bind_rows() |>
-  dplyr::pull(iso_a3) |>
+  dplyr::pull(sovereignt) |>
   sort()
 
-siglas_paises
+nome_paises
 
 ### Baixando ----
 
@@ -165,6 +165,8 @@ baixar_rasters_bioclim <- function(siglas_paises){
                                         res = 0.5,
                                         country = siglas_paises,
                                         path = getwd())
+
+  message(paste0("Raster para ", siglas_paises, " foi baixado"))
 
   assign(paste0("bioclim_", siglas_paises |> stringr::str_to_lower()),
          bioclim,
@@ -209,9 +211,9 @@ purrr::map2(arquivos,
 
 ### Unindo os rasters ----
 
-bioclim <- ls(pattern = "^bioclim_") |>
+bioclim <- bioclim <- ls(pattern = "^bioclim_") |>
   mget(envir = globalenv()) |>
-  terra::merge()
+  terra::rast()
 
 ### Visualizando ----
 
