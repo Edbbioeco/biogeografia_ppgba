@@ -152,7 +152,8 @@ ggplot() +
 siglas_paises <- ls(pattern = "^america_") |>
   mget(envir = globalenv()) |>
   dplyr::bind_rows() |>
-  dplyr::pull(iso_a3)
+  dplyr::pull(iso_a3) |>
+  sort()
 
 siglas_paises
 
@@ -203,6 +204,12 @@ arquivos
 purrr::map2(arquivos,
             siglas_paises |> sort(),
             importar_rasters_bioclim)
+
+### Unindo os rasters ----
+
+bioclim <- ls(pattern = "^bioclim_") |>
+  mget(envir = globalenv()) |>
+  terra::merge()
 
 ### Visualizando ----
 
