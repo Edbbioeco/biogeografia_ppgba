@@ -149,6 +149,14 @@ ggplot() +
 
 ### Siglas dos países ----
 
+siglas_paises <- ls(pattern = "^america_") |>
+  mget(envir = globalenv()) |>
+  dplyr::bind_rows() |>
+  dplyr::pull(sovereignt) |>
+  sort()
+
+siglas_paises
+
 nome_paises <- ls(pattern = "^america_") |>
   mget(envir = globalenv()) |>
   dplyr::bind_rows() |>
