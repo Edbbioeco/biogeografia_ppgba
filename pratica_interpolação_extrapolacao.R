@@ -152,7 +152,7 @@ ggplot() +
 siglas_paises <- ls(pattern = "^america_") |>
   mget(envir = globalenv()) |>
   dplyr::bind_rows() |>
-  dplyr::pull(sovereignt) |>
+  dplyr::pull(iso_a3) |>
   sort()
 
 siglas_paises
@@ -160,21 +160,21 @@ siglas_paises
 nome_paises <- ls(pattern = "^america_") |>
   mget(envir = globalenv()) |>
   dplyr::bind_rows() |>
-  dplyr::pull(sovereignt) |>
-  sort()
+  dplyr::arrange(iso_a3 = iso_a3 |> forcats::fct_relevel(siglas_paises)) |>
+  dplyr::pull(sovereignt)
 
 nome_paises
 
 ### Baixando ----
 
-baixar_rasters_bioclim <- function(siglas_paises){
+baixar_rasters_bioclim <- function(nome_paises, siglas_paises){
 
   bioclim <- geodata::worldclim_country(var = "bio",
                                         res = 0.5,
-                                        country = siglas_paises,
+                                        country = nome_paises,
                                         path = getwd())
 
-  message(paste0("Raster para ", siglas_paises, " foi baixado"))
+  message(paste0("Raster para ", nome_paises, " foi baixado"))
 
   assign(paste0("bioclim_", siglas_paises |> stringr::str_to_lower()),
          bioclim,
@@ -182,7 +182,7 @@ baixar_rasters_bioclim <- function(siglas_paises){
 
 }
 
-purrr::map(siglas_paises, baixar_rasters_bioclim)
+purrr::map2(nome_paises, siglas_paises, baixar_rasters_bioclim)
 
 ### Importando ----
 
