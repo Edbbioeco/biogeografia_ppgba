@@ -12,6 +12,8 @@ library(spThin)
 
 library(geodata)
 
+library(crayon)
+
 library(terra)
 
 library(tidyterra)
