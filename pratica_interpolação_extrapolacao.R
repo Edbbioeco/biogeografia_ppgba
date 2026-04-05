@@ -174,7 +174,9 @@ baixar_rasters_bioclim <- function(nome_paises, siglas_paises){
                                         country = nome_paises,
                                         path = getwd())
 
-  message(paste0("Raster para ", nome_paises, " foi baixado"))
+  paste0("Raster para ", nome_paises, " foi baixado") |>
+    crayon::green() |>
+    message()
 
   assign(paste0("bioclim_", siglas_paises |> stringr::str_to_lower()),
          bioclim,
