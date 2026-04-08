@@ -149,85 +149,31 @@ ggplot() +
 
 ## Variáveis ambientais ----
 
-### Siglas dos países ----
-
-siglas_paises <- ls(pattern = "^america_") |>
-  mget(envir = globalenv()) |>
-  dplyr::bind_rows() |>
-  dplyr::pull(iso_a3) |>
-  sort()
-
-siglas_paises
-
-nome_paises <- ls(pattern = "^america_") |>
-  mget(envir = globalenv()) |>
-  dplyr::bind_rows() |>
-  dplyr::arrange(iso_a3 = iso_a3 |> forcats::fct_relevel(siglas_paises)) |>
-  dplyr::pull(sovereignt)
-
-nome_paises
-
 ### Baixando ----
 
-baixar_rasters_bioclim <- function(nome_paises, siglas_paises){
+#### América do Norte ----
 
-  bioclim <- geodata::worldclim_country(var = "bio",
-                                        res = 0.5,
-                                        country = nome_paises,
-                                        path = getwd())
+bioclim_norte <- geodata::worldclim_global(var = "bio",
+                                     res = 0.5,
+                                     path = getwd()) |>
+  terra::crop(america_norte |>
+                sf::st_union() |>
+                sf::st_as_sf()) |>
+  terra::mask(america_norte |>
+                sf::st_union() |>
+                sf::st_as_sf())
 
-  paste0("Raster para ", nome_paises, " foi baixado") |>
-    crayon::green() |>
-    message()
+#### América do Sul ----
 
-  assign(paste0("bioclim_", siglas_paises |> stringr::str_to_lower()),
-         bioclim,
-         envir = globalenv())
-
-}
-
-purrr::map2(nome_paises, siglas_paises, baixar_rasters_bioclim)
-
-### Importando ----
-
-shapefile_america <- ls(pattern = "^america_") |>
-  mget(envir = globalenv()) |>
-  dplyr::bind_rows()
-
-importar_rasters_bioclim <- function(arquivos, siglas_paises){
-
-  bioclim <- terra::rast(arquivos)
-
-  shapefile <- shapefile_america |>
-    dplyr::filter(.data$iso_a3 == siglas_paises)
-
-  bioclim <- bioclim |>
-    terra::crop(shapefile) |>
-    terra::mask(shapefile)
-
-  paste0("Raster bioclimático de ", siglas_paises, " importado e recortado") |>
-    crayon::green() |>
-    message()
-
-  assign(paste0("bioclim_", siglas_paises |> stringr::str_to_lower()),
-         bioclim,
-         envir = globalenv())
-
-}
-
-arquivos <- list.files(path = "climate/wc2.1_country/", full.names = TRUE)
-
-arquivos
-
-purrr::map2(arquivos,
-            siglas_paises |> sort(),
-            importar_rasters_bioclim)
-
-### Unindo os rasters ----
-
-bioclim <- bioclim <- ls(pattern = "^bioclim_") |>
-  mget(envir = globalenv()) |>
-  terra::rast()
+bioclim_sul <- geodata::worldclim_global(var = "bio",
+                                   res = 0.5,
+                                   path = getwd()) |>
+  terra::crop(america_sul |>
+                sf::st_union() |>
+                sf::st_as_sf()) |>
+  terra::mask(america_sul |>
+                sf::st_union() |>
+                sf::st_as_sf())
 
 ### Visualizando ----
 
