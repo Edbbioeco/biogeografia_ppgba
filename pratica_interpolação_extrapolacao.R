@@ -241,12 +241,12 @@ ggplot() +
 ### Tratando a extenção e resolução ----
 
 elev_norte <- elev_norte |>
-  terra::resample(bioclim_trat_norte)
+  terra::resample(bioclim_norte)
 
 elev_norte
 
 elev_sul <- elev_sul |>
-  terra::resample(bioclim_trat_sul)
+  terra::resample(bioclim_sul)
 
 elev_sul
 
@@ -257,32 +257,32 @@ ggplot() +
 
 ### Unindo os rasters ----
 
-bioclim_trat_norte2 <- c(bioclim_trat_norte, elev_norte)
+bioclim_norte2 <- c(bioclim_norte, elev_norte)
 
-bioclim_trat_norte2
+bioclim_norte2
 
-bioclim_trat_sul2 <- c(bioclim_trat_sul, elev_sul)
+bioclim_sul2 <- c(bioclim_sul, elev_sul)
 
-bioclim_trat_sul2
+bioclim_sul2
 
-names(bioclim_trat_norte2) <- c(paste0("Bio0", 1:9),
+names(bioclim_norte2) <- c(paste0("Bio0", 1:9),
                                 paste0("Bio", 10:19),
                                 "Elevacao")
 
-names(bioclim_trat_sul2) <- c(paste0("Bio0", 1:9),
+names(bioclim_sul2) <- c(paste0("Bio0", 1:9),
                               paste0("Bio", 10:19),
                               "Elevacao")
-bioclim_trat_norte2
+bioclim_norte2
 
-bioclim_trat_sul2
+bioclim_sul2
 
 ggplot() +
-  tidyterra::geom_spatraster(data = bioclim_trat_norte2) +
+  tidyterra::geom_spatraster(data = bioclim_norte2) +
   scale_fill_viridis_c(na.value = NA) +
   facet_wrap(~lyr)
 
 ggplot() +
-  tidyterra::geom_spatraster(data = bioclim_trat_sul2) +
+  tidyterra::geom_spatraster(data = bioclim_sul2) +
   scale_fill_viridis_c(na.value = NA) +
   facet_wrap(~lyr)
 
@@ -290,7 +290,7 @@ ggplot() +
 
 ## Extraindo os dados ----
 
-bioclim_dados <- bioclim_trat_norte2 |>
+bioclim_dados <- bioclim_norte2 |>
   terra::extract(gbif_sf)
 
 bioclim_dados
@@ -375,11 +375,11 @@ bioclim_dados_sele <- bioclim_dados_trat |>
 
 bioclim_dados_sele
 
-bioclim_sele_norte <- bioclim_trat_norte2[[-c(1, 3:10, 12, 14:16)]]
+bioclim_sele_norte <- bioclim_norte2[[-c(1, 3:10, 12, 14:16)]]
 
 bioclim_sele_norte
 
-bioclim_sele_sul <- bioclim_trat_sul2[[-c(1, 3:10, 12, 14:16)]]
+bioclim_sele_sul <- bioclim_sul2[[-c(1, 3:10, 12, 14:16)]]
 
 bioclim_sele_sul
 
