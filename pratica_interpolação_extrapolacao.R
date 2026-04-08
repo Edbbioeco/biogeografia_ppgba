@@ -193,37 +193,6 @@ ggplot() +
   tidyterra::geom_spatraster(data = bioclim_sul) +
   scale_fill_viridis_c(na.value = NA)
 
-### Recortando ----
-
-bioclim_trat_norte <- bioclim |>
-  terra::crop(america_norte |>
-                sf::st_union() |>
-                sf::st_as_sf()) |>
-  terra::mask(america_norte |>
-                sf::st_union() |>
-                sf::st_as_sf())
-
-bioclim_trat_norte
-
-bioclim_trat_sul <- bioclim |>
-  terra::crop(america_sul |>
-                sf::st_union() |>
-                sf::st_as_sf()) |>
-  terra::mask(america_sul |>
-                sf::st_union() |>
-                sf::st_as_sf())
-
-bioclim_trat_sul
-
-ggplot() +
-  tidyterra::geom_spatraster(data = bioclim_trat_norte) +
-  scale_fill_viridis_c(na.value = NA) +
-  facet_wrap(~lyr)
-
-ggplot() +
-  tidyterra::geom_spatraster(data = bioclim_trat_norte[[1]]) +
-  scale_fill_viridis_c(na.value = NA)
-
 ## Elevação ----
 
 ### Importando ----
