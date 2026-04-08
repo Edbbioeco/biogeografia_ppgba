@@ -198,8 +198,8 @@ ggplot() +
 ### Importando ----
 
 elev_norte <- elevatr::get_elev_raster(locations = america_norte |>
-                                   sf::st_union() |>
-                                   sf::st_as_sf(),
+                                         sf::st_union() |>
+                                         sf::st_as_sf(),
                                  z = 5,
                                  prj = 4326,
                                  clip = "locations") |>
@@ -208,8 +208,8 @@ elev_norte <- elevatr::get_elev_raster(locations = america_norte |>
 elev_norte
 
 elev_sul <- elevatr::get_elev_raster(locations = america_sul |>
-                                         sf::st_union() |>
-                                         sf::st_as_sf(),
+                                       sf::st_union() |>
+                                       sf::st_as_sf(),
                                        z = 5,
                                        prj = 4326,
                                        clip = "locations") |>
