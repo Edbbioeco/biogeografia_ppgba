@@ -177,10 +177,20 @@ bioclim_sul <- geodata::worldclim_global(var = "bio",
 
 ### Visualizando ----
 
-bioclim
+#### América do Norte ----
+
+bioclim_norte
 
 ggplot() +
-  tidyterra::geom_spatraster(data = bioclim) +
+  tidyterra::geom_spatraster(data = bioclim_norte) +
+  scale_fill_viridis_c(na.value = NA)
+
+#### América do Sul ----
+
+bioclim_sul
+
+ggplot() +
+  tidyterra::geom_spatraster(data = bioclim_sul) +
   scale_fill_viridis_c(na.value = NA)
 
 ### Recortando ----
