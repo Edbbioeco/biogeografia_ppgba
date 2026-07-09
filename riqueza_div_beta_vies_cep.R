@@ -235,38 +235,26 @@ beta_df |> dplyr::glimpse()
 
 ## Rasterizando os três componentes ----
 
-rasters_beta <- function(componente){
-
-  rast_beta <- cep |>
-    dplyr::rename("id" = FID) |>
-    dplyr::left_join(beta_df,
-                     by = "id") |>
-    terra::vect() |>
-    terra::rasterize(cep_vetor, field = componente)
-
-  terra::crs(rast_beta) <- cep |> terra::crs()
-
-  assign(paste0("raster_beta_", componente),
-         rast_beta,
-         envir = globalenv())
-
-}
-
 componentes <- beta_df[-1] |> names()
 
 componentes
 
-purrr::walk(componentes, rasters_beta)
+beta_rasters <- purrr::map(componentes,
+                           purrr::in_parallel(
 
-## Unindo os rasters ----
+                             ~cep |>
+                               dplyr::mutate(id = 1:dplyr::n()) |>
+                               dplyr::left_join(beta_df,
+                                                by = "id") |>
+                               terra::vect() |>
+                               terra::rasterize(cep_vetor, field = .x) |>
+                               terra::project("EPSG:4674")
 
-beta_rasters <- ls(pattern = "raster_beta_") |>
-  mget(envir = globalenv()) |>
+                           )) |>
+  setNames(componentes) |>
   terra::rast()
 
 beta_rasters
-
-beta_rasters |> plot()
 
 ## Visualizando ----
 
