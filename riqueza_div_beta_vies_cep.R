@@ -185,12 +185,12 @@ ggplot() +
 matriz_beta <- registros_sf |>
   sf::st_join(cep) |>
   sf::st_drop_geometry() |>
-  dplyr::select(-c(1, 4)) |>
+  dplyr::select(1:3) |>
   tidyr::pivot_wider(names_from = species,
                      values_from = presence,
                      values_fill = 0,
                      values_fn = ~max(.)) |>
-  tibble::column_to_rownames(var = "FID")
+  tibble::column_to_rownames(var = "Assemblage")
 
 matriz_beta
 
