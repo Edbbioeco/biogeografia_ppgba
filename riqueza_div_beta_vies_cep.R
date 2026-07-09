@@ -260,7 +260,7 @@ beta_rasters
 ## Visualizando ----
 
 ggplot() +
-  geom_sf(data = cep, fill = "gray") +
+  geom_sf(data = cep, color = "#440154FF", fill = "#440154FF") +
   tidyterra::geom_spatraster(data = beta_rasters) +
   geom_sf(data = cep, fill = NA, color = "black") +
   scale_fill_viridis_c(na.value = "transparent",
@@ -269,6 +269,7 @@ ggplot() +
                                               frame.colour = "black",
                                               ticks.colour = "black",
                                               barheight = 20)) +
+  coord_sf(expand = FALSE) +
   facet_wrap(~lyr) +
   labs(fill = "Índice") +
   theme_bw() +
