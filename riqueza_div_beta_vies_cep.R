@@ -268,10 +268,19 @@ ggplot() +
                        guide = guide_colorbar(title.hjust = 0.5,
                                               frame.colour = "black",
                                               ticks.colour = "black",
-                                              barheight = 10)) +
+                                              barheight = 20)) +
   facet_wrap(~lyr) +
   labs(fill = "Índice") +
-  theme_bw()
+  theme_bw() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
+
+ggsave(filename = "mapa_diversidade_beta_totais.png",
+       height = 10, width = 12)
 
 ggplot() +
   geom_sf(data = cep, fill = "gray") +
@@ -282,10 +291,16 @@ ggplot() +
                        guide = guide_colorbar(title.hjust = 0.5,
                                               frame.colour = "black",
                                               ticks.colour = "black",
-                                              barheight = 10)) +
+                                              barheight = 20)) +
   facet_wrap(~lyr) +
   labs(fill = "Índice") +
-  theme_bw()
+  theme_bw() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
 
 ggplot() +
   geom_sf(data = cep, fill = "gray") +
@@ -296,10 +311,16 @@ ggplot() +
                        guide = guide_colorbar(title.hjust = 0.5,
                                               frame.colour = "black",
                                               ticks.colour = "black",
-                                              barheight = 10)) +
+                                              barheight = 20)) +
   facet_wrap(~lyr) +
   labs(fill = "Índice") +
-  theme_bw()
+  theme_bw() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
 
 ggplot() +
   geom_sf(data = cep, fill = "gray") +
@@ -310,10 +331,16 @@ ggplot() +
                        guide = guide_colorbar(title.hjust = 0.5,
                                               frame.colour = "black",
                                               ticks.colour = "black",
-                                              barheight = 10)) +
+                                              barheight = 20)) +
   facet_wrap(~lyr) +
   labs(fill = "Índice") +
-  theme_bw()
+  theme_bw() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
 
 # Vi[es de amostragem ----
 
@@ -356,7 +383,14 @@ ggplot() +
   geom_sf(data = uc_cep, fill = NA, color = "red") +
   facet_wrap(~lyr) +
   coord_sf(ylim = c(-11, -5),
-           xlim = c(-37, -34.8))
+           xlim = c(-37, -34.8)) +
+  theme_bw() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
 
 ggplot() +
   tidyterra::geom_spatraster(data = proj[[1]]) +
@@ -364,7 +398,14 @@ ggplot() +
   geom_sf(data = uc_cep, fill = NA, color = "red") +
   facet_wrap(~lyr) +
   coord_sf(ylim = c(-11, -5),
-           xlim = c(-37, -34.8))
+           xlim = c(-37, -34.3)) +
+  theme_bw() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
 
 ggplot() +
   tidyterra::geom_spatraster(data = proj[[2]]) +
@@ -373,7 +414,14 @@ ggplot() +
   geom_sf(data = capitais, fill = NA, color = "red") +
   facet_wrap(~lyr) +
   coord_sf(ylim = c(-11, -5),
-           xlim = c(-37, -34.8))
+           xlim = c(-37, -34.8)) +
+  theme_bw() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
 
 ggplot() +
   tidyterra::geom_spatraster(data = proj[[3]]) +
@@ -382,15 +430,36 @@ ggplot() +
   geom_sf(data = capitais, fill = NA, color = "red") +
   facet_wrap(~lyr) +
   coord_sf(ylim = c(-11, -5),
-           xlim = c(-37, -34.8))
+           xlim = c(-37, -34.8)) +
+  theme_bw() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
 
 ggplot() +
   tidyterra::geom_spatraster(data = proj[[4]]) +
   scale_fill_viridis_c(na.value = "transparent") +
   facet_wrap(~lyr) +
   coord_sf(ylim = c(-11, -5),
-           xlim = c(-37, -34.8))
+           xlim = c(-37, -34.8)) +
+  theme_bw() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
 
 ## Mpas de viéses ----
 
-proj |> sampbias::map_bias(type = "log_sampling_rate")
+proj |> sampbias::map_bias(type = "log_sampling_rate") +
+  theme_bw() +
+  theme(axis.text = element_text(color = "black", size = 20),
+        axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.text = element_text(color = "black", size = 20),
+        legend.title = element_text(color = "black", size = 20),
+        strip.text = element_text(color = "black", size = 20)) +
+  ggview::canvas(height = 10, width = 12)
