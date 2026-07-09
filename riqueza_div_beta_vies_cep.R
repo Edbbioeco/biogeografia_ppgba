@@ -73,12 +73,12 @@ ggplot() +
 
 uc_code <- uc |>
   sf::st_intersection(cep |> sf::st_union() |> sf::st_as_sf()) |>
-  dplyr::pull(code_conservation_unit)
+  dplyr::pull(cd_cnuc)
 
 uc_code
 
 uc_cep <- uc |>
-  dplyr::filter(code_conservation_unit %in% uc_code)
+  dplyr::filter(cd_cnuc %in% uc_code)
 
 ggplot() +
   geom_sf(data = cep) +
