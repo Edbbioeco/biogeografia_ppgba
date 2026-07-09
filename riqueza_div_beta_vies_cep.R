@@ -250,7 +250,8 @@ beta_rasters <- purrr::map(componentes,
                                terra::rasterize(cep_vetor, field = .x) |>
                                terra::project("EPSG:4674")
 
-                           )) |>
+                           ),
+                           .progress = TRUE) |>
   setNames(componentes) |>
   terra::rast()
 
@@ -262,33 +263,57 @@ ggplot() +
   geom_sf(data = cep, fill = "gray") +
   tidyterra::geom_spatraster(data = beta_rasters) +
   geom_sf(data = cep, fill = NA, color = "black") +
+  scale_fill_viridis_c(na.value = "transparent",
+                       limits = c(0, 1),
+                       guide = guide_colorbar(title.hjust = 0.5,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              barheight = 10)) +
   facet_wrap(~lyr) +
-  scale_fill_viridis_c(option = "turbo",
-                       na.value = "transparent")
+  labs(fill = "Índice") +
+  theme_bw()
 
 ggplot() +
   geom_sf(data = cep, fill = "gray") +
   tidyterra::geom_spatraster(data = beta_rasters[[1]]) +
   geom_sf(data = cep, fill = NA, color = "black") +
+  scale_fill_viridis_c(na.value = "transparent",
+                       limits = c(0, 1),
+                       guide = guide_colorbar(title.hjust = 0.5,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              barheight = 10)) +
   facet_wrap(~lyr) +
-  scale_fill_viridis_c(option = "turbo",
-                       na.value = "transparent")
+  labs(fill = "Índice") +
+  theme_bw()
 
 ggplot() +
   geom_sf(data = cep, fill = "gray") +
   tidyterra::geom_spatraster(data = beta_rasters[[2]]) +
   geom_sf(data = cep, fill = NA, color = "black") +
+  scale_fill_viridis_c(na.value = "transparent",
+                       limits = c(0, 1),
+                       guide = guide_colorbar(title.hjust = 0.5,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              barheight = 10)) +
   facet_wrap(~lyr) +
-  scale_fill_viridis_c(option = "turbo",
-                       na.value = "transparent")
+  labs(fill = "Índice") +
+  theme_bw()
 
 ggplot() +
   geom_sf(data = cep, fill = "gray") +
   tidyterra::geom_spatraster(data = beta_rasters[[3]]) +
   geom_sf(data = cep, fill = NA, color = "black") +
+  scale_fill_viridis_c(na.value = "transparent",
+                       limits = c(0, 1),
+                       guide = guide_colorbar(title.hjust = 0.5,
+                                              frame.colour = "black",
+                                              ticks.colour = "black",
+                                              barheight = 10)) +
   facet_wrap(~lyr) +
-  scale_fill_viridis_c(option = "turbo",
-                       na.value = "transparent")
+  labs(fill = "Índice") +
+  theme_bw()
 
 # Vi[es de amostragem ----
 
