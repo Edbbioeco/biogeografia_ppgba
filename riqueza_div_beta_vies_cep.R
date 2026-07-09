@@ -124,7 +124,7 @@ riqueza_fid <- registros_sf |>
   sf::st_join(cep) |>
   sf::st_drop_geometry() |>
   dplyr::summarise(Riqueza = dplyr::n_distinct(species),
-                   .by = FID)
+                   .by = Assemblage )
 
 riqueza_fid
 
