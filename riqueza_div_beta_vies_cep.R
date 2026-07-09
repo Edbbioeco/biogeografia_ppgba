@@ -96,7 +96,7 @@ uc_cep_vec
 
 ### Importando ----
 
-capitais <- geobr::read_municipality() |>
+capitais <- geobr::read_municipality(year = 2025) |>
   dplyr::filter(name_muni %in% c("Maceió",
                                  "Recife",
                                  "João Pessoa",
