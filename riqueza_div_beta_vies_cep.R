@@ -59,7 +59,7 @@ ggplot() +
 
 ### Importando ----
 
-uc <- geobr::read_conservation_units() |>
+uc <- geobr::read_conservation_units(date = 202503) |>
   sf::st_make_valid()
 
 ### Visualizando ----
