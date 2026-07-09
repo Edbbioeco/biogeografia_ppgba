@@ -129,7 +129,9 @@ riqueza_fid <- registros_sf |>
 riqueza_fid
 
 cep_trat <- cep |>
-  dplyr::left_join(riqueza_fid) |>
+  dplyr::mutate(Assemblage = 1:dplyr::n()) |>
+  dplyr::left_join(riqueza_fid,
+                   by = "Assemblage") |>
   dplyr::mutate(Riqueza = dplyr::case_when(Riqueza |> is.na() ~ 0,
                                            .default = Riqueza))
 
