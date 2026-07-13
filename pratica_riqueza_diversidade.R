@@ -329,20 +329,6 @@ beta_df |> dplyr::glimpse()
 
 ## Rasterizando os três componentes ----
 
-rasters_beta <- function(componente){
-
-  rast_beta <- br_grid |>
-    dplyr::left_join(beta_df,
-                     by = "id") |>
-    terra::vect() |>
-    terra::rasterize(vetor, field = componente)
-
-  assign(paste0("raster_beta_", componente),
-         rast_beta,
-         envir = globalenv())
-
-}
-
 componentes <- beta_df[-1] |> names()
 
 componentes
