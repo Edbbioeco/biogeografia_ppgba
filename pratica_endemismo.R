@@ -249,7 +249,8 @@ purrr::map(id,
 ## Exportando ----
 
 occ_raster |>
-  terra::writeRaster("occ_raster.tif")
+  terra::writeRaster("occ_raster.tif",
+                     overwrite = TRUE)
 
 occ_raster <- terra::rast("occ_raster.tif")
 
