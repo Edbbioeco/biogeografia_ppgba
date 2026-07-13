@@ -347,12 +347,17 @@ componentes <- beta_df[-1] |> names()
 
 componentes
 
-purrr::map(componentes, rasters_beta)
+beta_rasters <- purrr::map(componentes,
+                           purrr::in_parallel(
 
-## Unindo os rasters ----
+                            ~ br_grid |>
+                               dplyr::left_join(beta_df,
+                                                by = "id") |>
+                               terra::vect() |>
+                               terra::rasterize(vetor, field = .x)
 
-beta_rasters <- ls(pattern = "raster_beta_") |>
-  mget(envir = globalenv()) |>
+                           ),
+                           .progress = TRUE) |>
   terra::rast()
 
 beta_rasters
