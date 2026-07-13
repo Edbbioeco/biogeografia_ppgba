@@ -348,7 +348,15 @@ beta_rasters <- purrr::map(componentes,
 
 beta_rasters
 
-beta_rasters |> plot()
+purrr::map(beta_rasters,
+           purrr::in_parallel(
+
+             ~ggplot()+
+               tidyterra::geom_spatraster(data = .x) +
+               scale_fill_viridis_c()
+
+           ),
+           .progress = TRUE)
 
 ## Visualizando ----
 
