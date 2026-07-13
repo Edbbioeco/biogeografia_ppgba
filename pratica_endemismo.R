@@ -225,35 +225,26 @@ occ_raster <- purrr::map(especie,
 
 occ_raster
 
-## Unindo os rasters -----
-
-occ_raster <- ls(pattern = "raster_occ_") |>
-  mget(envir = globalenv()) |>
-  terra::rast()
-
-occ_raster
-
-names(occ_raster) <- especie |>
-  stringr::str_extract("(?<=\\[).*?(?=\\])")
-
-visualizar_raster <- function(id){
-
-  ggplot() +
-    tidyterra::geom_spatraster(data = occ_raster[[id]]) +
-    scale_fill_viridis_c(na.value = "transparent") +
-    facet_wrap(~lyr) +
-    theme_minimal() +
-    theme(strip.text = element_text(color = "black",
-                               size = 12,
-                               face = "italic"))
-
-}
+## Visualizar -----
 
 id <- 1:terra::nlyr(occ_raster)
 
 id
 
-purrr::map(id, visualizar_raster)
+purrr::map(id,
+           purrr::in_parallel(
+
+             ~ggplot() +
+               tidyterra::geom_spatraster(data = occ_raster[[.x]]) +
+               scale_fill_viridis_c(na.value = "transparent") +
+               facet_wrap(~lyr) +
+               theme_minimal() +
+               theme(strip.text = element_text(color = "black",
+                                               size = 12,
+                                               face = "italic"))
+
+           ),
+           .progress = TRUE)
 
 ## Exportando ----
 
