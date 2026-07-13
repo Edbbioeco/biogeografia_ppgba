@@ -261,24 +261,24 @@ inv_area <- occ_raster |> phyloraster::inv.range()
 
 ### Visualizando ----
 
-visualizar_invarea <- function(id){
-
-  ggplot() +
-    tidyterra::geom_spatraster(data = inv_area[[id]]) +
-    scale_fill_viridis_c(na.value = "transparent") +
-    facet_wrap(~lyr) +
-    theme_minimal() +
-    theme(strip.text = element_text(color = "black",
-                                    size = 12,
-                                    face = "italic"))
-
-}
-
 id <- 1:terra::nlyr(inv_area)
 
 id
 
-purrr::map(id, visualizar_invarea)
+purrr::map(id,
+           purrr::in_parallel(
+
+             ~ggplot() +
+               tidyterra::geom_spatraster(data = inv_area[[.x]]) +
+               scale_fill_viridis_c(na.value = "transparent") +
+               facet_wrap(~lyr) +
+               theme_minimal() +
+               theme(strip.text = element_text(color = "black",
+                                               size = 12,
+                                               face = "italic"))
+
+           ),
+           .progress = TRUE)
 
 ## Calculando EA através do pacote phyloraster ----
 
