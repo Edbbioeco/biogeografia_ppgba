@@ -355,13 +355,17 @@ gazetteers
 ## Análise com resolução de 2.0 (~ 200km) e sem definir uma máscara aos dados ----
 
 
-bias.out <- sampbias::calculate_bias(x = registros |>
-                                       dplyr::select(5:6) |>
-                                       dplyr::rename("decimalLongitude" = Longitude,
-                                                     "decimalLatitude" = Latitude),
-                                     gaz = gazetteers,
-                                     res = terra::res(cep_riqueza_rast)[1],
-                                     plot_raster = TRUE)
+bias.out <- sampbias::calculate_bias(
+
+  x = registros |>
+    dplyr::select(5:6) |>
+    dplyr::rename("decimalLongitude" = Longitude,
+                  "decimalLatitude" = Latitude),
+  gaz = gazetteers,
+  res = terra::res(cep_riqueza_rast)[1],
+  plot_raster = TRUE
+
+  )
 
 bias.out
 
