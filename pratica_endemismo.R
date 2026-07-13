@@ -176,7 +176,54 @@ especie <- df_occ$Espécie |> unique()
 
 especie
 
-purrr::map(especie, multiplos_rasters)
+occ_raster <- purrr::map(especie,
+                         purrr::in_parallel(
+
+             \(especie){
+
+               raster_inicial <- grade |>
+                 dplyr::left_join(grade_id |>
+                                    sf::st_drop_geometry(), by = "id") |>
+                 dplyr::mutate(presenca = 1) |>
+                 tidyr::drop_na() |>
+                 tidyr::pivot_wider(names_from = Espécie,
+                                    values_from = presenca,
+                                    values_fill = 0,
+                                    values_fn = ~max(.)) |>
+                 tidyr::pivot_longer(cols = 3:146,
+                                     names_to = "Espécie",
+                                     values_to = "presenca") |>
+                 dplyr::filter(Espécie == especie) |>
+                 terra::vect() |>
+                 terra::ext() |>
+                 terra::rast(resolution = c(6.500, 6.980))
+
+
+               grade |>
+                 dplyr::left_join(grade_id |>
+                                    sf::st_drop_geometry(),
+                                  by = "id") |>
+                 dplyr::mutate(presenca = 1) |>
+                 tidyr::drop_na() |>
+                 tidyr::pivot_wider(names_from = Espécie,
+                                    values_from = presenca,
+                                    values_fill = 0,
+                                    values_fn = ~ max(.)) |>
+                 tidyr::pivot_longer(cols = 3:146,
+                                     names_to = "Espécie",
+                                     values_to = "presenca") |>
+                 dplyr::filter(Espécie == especie) |>
+                 terra::vect() |>
+                 terra::rasterize(raster_inicial, field = "presenca")
+
+               }
+           ),
+           .progress = TRUE) |>
+  setNames(especie |>
+             stringr::str_extract("(?<=\\[).*?(?=\\])")) |>
+  terra::rast()
+
+occ_raster
 
 ## Unindo os rasters -----
 
